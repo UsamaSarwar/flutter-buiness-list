@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Business {
   final String name;
@@ -36,11 +37,22 @@ class BusinessProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final cached = prefs.getString('businesses_cache');
+      if (cached != null) {
+        final List<dynamic> data = json.decode(cached);
+        _businesses = data.map((e) => Business.fromJson(e)).toList();
+        _loading = false;
+        notifyListeners();
+        return;
+      }
       // Use Dio for local asset fetch
       final dio = Dio();
       final response = await rootBundle.loadString('assets/businesses.json');
       final List<dynamic> data = json.decode(response);
       _businesses = data.map((e) => Business.fromJson(e)).toList();
+      // Cache for offline use
+      await prefs.setString('businesses_cache', json.encode(data));
     } catch (e) {
       _error = 'Failed to load businesses';
     }
