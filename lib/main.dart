@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'business_provider.dart';
 
 void main() {
 	runApp(const BusinessListApp());
@@ -10,22 +11,22 @@ class BusinessListApp extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-		return MultiProvider(
-			providers: [
-				// Add providers here
-			],
-			child: MaterialApp(
-				title: 'Business List',
-				theme: ThemeData(
-					primarySwatch: Colors.blue,
+			return MultiProvider(
+				providers: [
+					ChangeNotifierProvider(create: (_) => BusinessProvider()..fetchBusinesses()),
+				],
+				child: MaterialApp(
+					title: 'Business List',
+					theme: ThemeData(
+						primarySwatch: Colors.blue,
+					),
+					initialRoute: '/',
+					routes: {
+						'/': (context) => const BusinessListScreen(),
+						'/details': (context) => const BusinessDetailsScreen(),
+					},
 				),
-				initialRoute: '/',
-				routes: {
-					'/': (context) => const BusinessListScreen(),
-					'/details': (context) => const BusinessDetailsScreen(),
-				},
-			),
-		);
+			);
 	}
 }
 
