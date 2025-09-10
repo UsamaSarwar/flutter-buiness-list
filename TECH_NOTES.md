@@ -1,5 +1,3 @@
-# TECH_NOTES.md
-
 ## Architecture Overview
 
 - **State Management:** Provider is used for app-wide state, with a ChangeNotifier for business data and UI states.
@@ -23,7 +21,3 @@
 - Improve error handling with more granular messages and logging.
 - Refactor networking to support remote APIs and async updates.
 - Enhance UI with animations, theming, and accessibility features.
-
----
-
-For questions or improvements, see the commit history for development flow and rationale.
